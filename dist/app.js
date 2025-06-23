@@ -15,30 +15,32 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const mongoose_1 = __importDefault(require("mongoose"));
 const cors_1 = __importDefault(require("cors"));
-const book_route_1 = require("./routes/book.route");
+const book_routes_1 = require("./routes/book.routes");
 const app = (0, express_1.default)();
 app.use((0, cors_1.default)());
 app.use(express_1.default.json());
-// API routes
-app.use('/api/books', book_route_1.bookRouter);
-// app.use('/api/borrow');
-// error handling 
+// routes 
+app.use('/api/books', book_routes_1.bookRouter);
+app.get('/', (req, res) => {
+    res.send('Library API is running...');
+});
+// handles errors
 app.use((err, req, res, next) => {
     res.status(500).json({
-        message: err.message || 'Something went wrong',
         success: false,
-        error: err,
+        message: err.message || 'Internal Server Error',
     });
 });
-// Connect to MongoDB and start server
-const main = () => __awaiter(void 0, void 0, void 0, function* () {
+const start = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        yield mongoose_1.default.connect('mongodb+srv://learning:7CZIO6IRQ7D63BZ4@cluster0.23lvn.mongodb.net/advance-to-do-app?retryWrites=true&w=majority&appName=Cluster0');
-        app.listen(5000, () => console.log('Server running on port 5000'));
-        console.log("database connected");
+        yield mongoose_1.default.connect('mongodb://127.0.0.1:27017/library');
+        console.log('MongoDB connected');
+        app.listen(5000, () => {
+            console.log(' Server is running on port 5000');
+        });
     }
-    catch (error) {
-        console.error('Connection error', error);
+    catch (err) {
+        console.error(' Failed to connect MongoDB', err);
     }
 });
-main();
+start();

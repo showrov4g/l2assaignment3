@@ -9,31 +9,38 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getAllBooks = exports.createBook = void 0;
+exports.getBookById = exports.getAllBooks = exports.createBook = void 0;
 const book_model_1 = require("../models/book.model");
-// create post 
 const createBook = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const book = yield book_model_1.Book.create(req.body);
-        res.status(201).json({ success: true, message: 'Book created successfully', data: book });
+        res.status(201).json({ success: true, message: 'Book created', data: book });
     }
     catch (err) {
         next(err);
     }
 });
 exports.createBook = createBook;
-// get all the books data 
 const getAllBooks = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { filter, sortBy = 'createdAt', sort = 'desc', limit = '10' } = req.query;
-        const query = filter ? { genre: filter } : {};
-        const books = yield book_model_1.Book.find(query)
-            .sort({ [sortBy]: sort === 'asc' ? 1 : -1 })
-            .limit(parseInt(limit));
-        res.json({ success: true, message: 'Books retrieved successfully', data: books });
+        const books = yield book_model_1.Book.find();
+        res.status(200).json({ success: true, message: 'Books fetched', data: books });
     }
     catch (err) {
         next(err);
     }
 });
 exports.getAllBooks = getAllBooks;
+const getBookById = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const book = yield book_model_1.Book.findById(req.params.bookId);
+        if (!book) {
+            return res.status(404).json({ success: false, message: 'Book not found' });
+        }
+        res.status(200).json({ success: true, data: book });
+    }
+    catch (err) {
+        next(err);
+    }
+});
+exports.getBookById = getBookById;
