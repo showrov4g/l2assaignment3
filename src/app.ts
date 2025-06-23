@@ -8,8 +8,8 @@ app.use(cors());
 app.use(express.json());
 
 // API routes
-app.use('/books' );
-app.use('/borrow');
+// app.use('/api/books' );
+// app.use('/api/borrow');
 // error handling 
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
   res.status(500).json({
