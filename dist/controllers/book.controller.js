@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateBook = exports.getBookById = exports.getAllBooks = exports.createBook = void 0;
+exports.deleteBook = exports.updateBook = exports.getBookById = exports.getAllBooks = exports.createBook = void 0;
 const book_model_1 = require("../models/book.model");
 // create book data 
 const createBook = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
@@ -60,3 +60,14 @@ const updateBook = (req, res, next) => __awaiter(void 0, void 0, void 0, functio
     }
 });
 exports.updateBook = updateBook;
+// book data delete 
+const deleteBook = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        yield book_model_1.Book.findByIdAndDelete(req.params.bookId);
+        res.json({ success: true, message: 'Book deleted successfully', data: null });
+    }
+    catch (err) {
+        next(err);
+    }
+});
+exports.deleteBook = deleteBook;

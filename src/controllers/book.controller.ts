@@ -41,3 +41,14 @@ export const updateBook = async (req: Request, res: Response, next: NextFunction
     next(err);
   }
 };
+
+// book data delete 
+
+export const deleteBook = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    await Book.findByIdAndDelete(req.params.bookId);
+    res.json({ success: true, message: 'Book deleted successfully', data: null });
+  } catch (err) {
+    next(err);
+  }
+};

@@ -13,3 +13,4 @@ bookRouter.post('/', (0, error_1.catchAsync)(book_controller_1.createBook));
 bookRouter.get('/', (0, error_1.catchAsync)(book_controller_1.getAllBooks));
 bookRouter.get('/:bookId', (0, error_1.catchAsync)(book_controller_1.getBookById));
 bookRouter.patch('/:bookId', (0, error_1.catchAsync)(book_controller_1.updateBook));
+bookRouter.delete('/:bookId', (0, error_1.catchAsync)(book_controller_1.deleteBook));
