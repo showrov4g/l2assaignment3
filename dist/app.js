@@ -20,7 +20,7 @@ const app = (0, express_1.default)();
 app.use((0, cors_1.default)());
 app.use(express_1.default.json());
 // API routes
-app.use('/api/books', book_controller_1.bookRoutes);
+app.use('/api/books', book_controller_1.createBook);
 // app.use('/api/borrow');
 // error handling 
 app.use((err, req, res, next) => {

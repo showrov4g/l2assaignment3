@@ -1,7 +1,7 @@
 import express, { Request, Response, NextFunction } from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
-import { bookRoutes } from './controllers/book.controller';
+import { createBook } from './controllers/book.controller';
 
 const app = express();
 
@@ -9,7 +9,8 @@ app.use(cors());
 app.use(express.json());
 
 // API routes
-app.use('/api/books',bookRoutes);
+app.use('/api/books', createBook);
+
 // app.use('/api/borrow');
 // error handling 
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
