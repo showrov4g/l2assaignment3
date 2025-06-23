@@ -10,3 +10,18 @@ export const createBook = async (req: Request, res: Response, next: NextFunction
     next(err);
   }
 };
+
+// get all the books data 
+
+export const getAllBooks = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { filter, sortBy = 'createdAt', sort = 'desc', limit = '10' } = req.query;
+    const query: any = filter ? { genre: filter } : {};
+    const books = await Book.find(query)
+      .sort({ [sortBy as string]: sort === 'asc' ? 1 : -1 })
+      .limit(parseInt(limit as string));
+    res.json({ success: true, message: 'Books retrieved successfully', data: books });
+  } catch (err) {
+    next(err);
+  }
+};
