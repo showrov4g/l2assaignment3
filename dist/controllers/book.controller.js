@@ -9,8 +9,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getBookById = exports.getAllBooks = exports.createBook = void 0;
+exports.updateBook = exports.getBookById = exports.getAllBooks = exports.createBook = void 0;
 const book_model_1 = require("../models/book.model");
+// create book data 
 const createBook = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const book = yield book_model_1.Book.create(req.body);
@@ -21,6 +22,7 @@ const createBook = (req, res, next) => __awaiter(void 0, void 0, void 0, functio
     }
 });
 exports.createBook = createBook;
+// get all book data 
 const getAllBooks = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const books = yield book_model_1.Book.find();
@@ -31,6 +33,7 @@ const getAllBooks = (req, res, next) => __awaiter(void 0, void 0, void 0, functi
     }
 });
 exports.getAllBooks = getAllBooks;
+// get book by id 
 const getBookById = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const book = yield book_model_1.Book.findById(req.params.bookId);
@@ -44,3 +47,16 @@ const getBookById = (req, res, next) => __awaiter(void 0, void 0, void 0, functi
     }
 });
 exports.getBookById = getBookById;
+// update book data  
+const updateBook = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const book = yield book_model_1.Book.findByIdAndUpdate(req.params.bookId, req.body, { new: true, runValidators: true });
+        if (!book)
+            return res.status(404).json({ success: false, message: 'Book not found' });
+        res.json({ success: true, message: 'Book updated successfully', data: book });
+    }
+    catch (err) {
+        next(err);
+    }
+});
+exports.updateBook = updateBook;
