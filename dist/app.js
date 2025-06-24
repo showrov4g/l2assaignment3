@@ -33,10 +33,13 @@ app.use((err, req, res, next) => {
         error: err,
     });
 });
+app.get('/', (req, res) => {
+    res.send(' Library API is running');
+});
 // Connect to MongoDB and start server
 const main = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        yield mongoose_1.default.connect(process.env.MONGODB_URI);
+        yield mongoose_1.default.connect("mongodb+srv://learning:7CZIO6IRQ7D63BZ4@cluster0.23lvn.mongodb.net/advance-to-do-app?retryWrites=true&w=majority&appName=Cluster0");
         app.listen(5000, () => console.log('Server running on port 5000'));
     }
     catch (err) {
