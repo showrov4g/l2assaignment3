@@ -1,37 +1,42 @@
 import { Request, Response, NextFunction } from 'express';
 import { Book } from '../models/book.model';
-// create book data 
+ 
+// create book 
 export const createBook = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const book = await Book.create(req.body);
-    res.status(201).json({ success: true, message: 'Book created', data: book });
+    res.status(201).json({ success: true, message: 'Book created successfully', data: book });
   } catch (err) {
     next(err);
   }
 };
-// get all book data 
+//  get all book 
 export const getAllBooks = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const books = await Book.find();
-    res.status(200).json({ success: true, message: 'Books fetched', data: books });
+    const { filter, sortBy = 'createdAt', sort = 'desc', limit = '10' } = req.query;
+    const query: any = filter ? { genre: filter } : {};
+    const books = await Book.find(query)
+      .sort({ [sortBy as string]: sort === 'asc' ? 1 : -1 })
+      .limit(parseInt(limit as string));
+    res.json({ success: true, message: 'Books retrieved successfully', data: books });
   } catch (err) {
     next(err);
   }
 };
-// get book by id 
+// get all book by id 
+
 export const getBookById = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const book = await Book.findById(req.params.bookId);
-    if (!book) {
-      return res.status(404).json({ success: false, message: 'Book not found' });
-    }
-    res.status(200).json({ success: true, data: book });
+    if (!book) return res.status(404).json({ success: false, message: 'Book not found' });
+    res.json({ success: true, message: 'Book retrieved successfully', data: book });
   } catch (err) {
     next(err);
   }
 };
-// update book data  
 
+// update book data 
+ 
 export const updateBook = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const book = await Book.findByIdAndUpdate(req.params.bookId, req.body, { new: true, runValidators: true });
@@ -42,7 +47,8 @@ export const updateBook = async (req: Request, res: Response, next: NextFunction
   }
 };
 
-// book data delete 
+// delete book data 
+
 
 export const deleteBook = async (req: Request, res: Response, next: NextFunction) => {
   try {

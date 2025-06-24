@@ -11,43 +11,46 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteBook = exports.updateBook = exports.getBookById = exports.getAllBooks = exports.createBook = void 0;
 const book_model_1 = require("../models/book.model");
-// create book data 
+// create book 
 const createBook = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const book = yield book_model_1.Book.create(req.body);
-        res.status(201).json({ success: true, message: 'Book created', data: book });
+        res.status(201).json({ success: true, message: 'Book created successfully', data: book });
     }
     catch (err) {
         next(err);
     }
 });
 exports.createBook = createBook;
-// get all book data 
+//  get all book 
 const getAllBooks = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const books = yield book_model_1.Book.find();
-        res.status(200).json({ success: true, message: 'Books fetched', data: books });
+        const { filter, sortBy = 'createdAt', sort = 'desc', limit = '10' } = req.query;
+        const query = filter ? { genre: filter } : {};
+        const books = yield book_model_1.Book.find(query)
+            .sort({ [sortBy]: sort === 'asc' ? 1 : -1 })
+            .limit(parseInt(limit));
+        res.json({ success: true, message: 'Books retrieved successfully', data: books });
     }
     catch (err) {
         next(err);
     }
 });
 exports.getAllBooks = getAllBooks;
-// get book by id 
+// get all book by id 
 const getBookById = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const book = yield book_model_1.Book.findById(req.params.bookId);
-        if (!book) {
+        if (!book)
             return res.status(404).json({ success: false, message: 'Book not found' });
-        }
-        res.status(200).json({ success: true, data: book });
+        res.json({ success: true, message: 'Book retrieved successfully', data: book });
     }
     catch (err) {
         next(err);
     }
 });
 exports.getBookById = getBookById;
-// update book data  
+// update book data 
 const updateBook = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const book = yield book_model_1.Book.findByIdAndUpdate(req.params.bookId, req.body, { new: true, runValidators: true });
@@ -60,7 +63,7 @@ const updateBook = (req, res, next) => __awaiter(void 0, void 0, void 0, functio
     }
 });
 exports.updateBook = updateBook;
-// book data delete 
+// delete book data 
 const deleteBook = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         yield book_model_1.Book.findByIdAndDelete(req.params.bookId);

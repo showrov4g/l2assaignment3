@@ -6,9 +6,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.bookRouter = void 0;
 const express_1 = __importDefault(require("express"));
 const book_controller_1 = require("../controllers/book.controller");
+const error_1 = require("../utils/error");
+// Routers 
 exports.bookRouter = express_1.default.Router();
 exports.bookRouter.post('/', book_controller_1.createBook);
 exports.bookRouter.get('/', book_controller_1.getAllBooks);
-exports.bookRouter.get('/:bookId', book_controller_1.getBookById);
-// bookRouter.put('/:bookId', updateBook);
-// bookRouter.delete('/:bookId', deleteBook);
+exports.bookRouter.get('/:bookId', (0, error_1.catchAsync)(book_controller_1.getBookById));
+exports.bookRouter.put('/:bookId', (0, error_1.catchAsync)(book_controller_1.updateBook));
+exports.bookRouter.delete('/:bookId', book_controller_1.deleteBook);

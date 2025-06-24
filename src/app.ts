@@ -1,38 +1,35 @@
 import express, { Request, Response, NextFunction } from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
-import { bookRouter } from './routes/book.routes';
+import { bookRouter } from './routes/book.route';
+import { borrowRouter } from './routes/borrow.route';
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 
-// routes 
+// API routes
 app.use('/api/books', bookRouter);
+app.use('/api/borrow', borrowRouter);
 
-app.get('/', (req: Request, res: Response) => {
-  res.send('Library API is running...');
-});
-
-// handles errors
+// Global error handler
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
   res.status(500).json({
+    message: err.message || 'Something went wrong',
     success: false,
-    message: err.message || 'Internal Server Error',
+    error: err,
   });
 });
 
-const start = async () => {
+// Connect to MongoDB and start server
+const main = async () => {
   try {
-    await mongoose.connect('mongodb://127.0.0.1:27017/library');
-    console.log('MongoDB connected');
-    app.listen(5000, () => {
-      console.log(' Server is running on port 5000');
-    });
+    await mongoose.connect('mongodb+srv://learning:7CZIO6IRQ7D63BZ4@cluster0.23lvn.mongodb.net/advance-to-do-app?retryWrites=true&w=majority&appName=Cluster0');
+    app.listen(5000, () => console.log('Server running on port 5000'));
   } catch (err) {
-    console.error(' Failed to connect MongoDB', err);
+    console.error('Connection error', err);
   }
 };
 
-start();
+main();
