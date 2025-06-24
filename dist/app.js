@@ -17,6 +17,8 @@ const mongoose_1 = __importDefault(require("mongoose"));
 const cors_1 = __importDefault(require("cors"));
 const book_route_1 = require("./routes/book.route");
 const borrow_route_1 = require("./routes/borrow.route");
+const dotenv_1 = __importDefault(require("dotenv"));
+dotenv_1.default.config();
 const app = (0, express_1.default)();
 app.use((0, cors_1.default)());
 app.use(express_1.default.json());
@@ -34,7 +36,7 @@ app.use((err, req, res, next) => {
 // Connect to MongoDB and start server
 const main = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        yield mongoose_1.default.connect('mongodb+srv://learning:7CZIO6IRQ7D63BZ4@cluster0.23lvn.mongodb.net/advance-to-do-app?retryWrites=true&w=majority&appName=Cluster0');
+        yield mongoose_1.default.connect(process.env.MONGODB_URI);
         app.listen(5000, () => console.log('Server running on port 5000'));
     }
     catch (err) {

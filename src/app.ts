@@ -3,6 +3,9 @@ import mongoose from 'mongoose';
 import cors from 'cors';
 import { bookRouter } from './routes/book.route';
 import { borrowRouter } from './routes/borrow.route';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const app = express();
 
@@ -25,7 +28,7 @@ app.use((err: any, req: Request, res: Response, next: NextFunction) => {
 // Connect to MongoDB and start server
 const main = async () => {
   try {
-    await mongoose.connect('mongodb+srv://learning:7CZIO6IRQ7D63BZ4@cluster0.23lvn.mongodb.net/advance-to-do-app?retryWrites=true&w=majority&appName=Cluster0');
+    await mongoose.connect(process.env.MONGODB_URI!);
     app.listen(5000, () => console.log('Server running on port 5000'));
   } catch (err) {
     console.error('Connection error', err);
